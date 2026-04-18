@@ -312,7 +312,70 @@ public class Main {
 | **Thay đổi runtime** | Có thể thay đổi | Không thể thay đổi |
 | **Tái sử dụng** | Linh hoạt hơn | Hạn chế hơn |
 
-**Khi nào dùng Composition thay vì Inheritance?**
-- Khi bạn cần linh hoạt thay đổi hành vi tại runtime
-- Khi bạn muốn tránh vấn đề của đa kế thừa (Java không hỗ trợ)
-- Khi quan hệ giữa các đối tượng không phải là "is-a" mà là "has-a"
+# So sánh Inheritance (Kế thừa) vs Composition (Kết hợp)
+
+## 1. Bảng so sánh tổng quan
+
+| Đặc điểm | Inheritance (Kế thừa) | Composition (Kết hợp) |
+| :--- | :--- | :--- |
+| **Mối quan hệ** | **Is-a** (Là một) | **Has-a** (Có một) |
+| **Thời điểm xác định** | **Compile-time** (Tĩnh/Cố định) | **Runtime** (Động/Thay đổi được) |
+| **Tính gắn kết** | **Tight Coupling** (Phụ thuộc chặt) | **Loose Coupling** (Liên kết lỏng) |
+| **Khả năng thay đổi** | Khó thay đổi khi chương trình đang chạy | Dễ dàng tráo đổi linh kiện bằng Setter |
+
+---
+
+# So sánh Inheritance (Kế thừa) vs Composition (Kết hợp)
+
+## 2. Khi nào dùng Composition thay vì Inheritance?
+
+### 🟢 Khi cần linh hoạt thay đổi hành vi tại Runtime
+Inheritance là quan hệ **Static (Tĩnh)** - "đóng băng" hành vi ngay từ lúc biên dịch. Composition là quan hệ **Dynamic (Động)**.
+* **Cốt lõi:** Cho phép tráo đổi linh kiện (Component) ngay khi chương trình đang chạy mà không cần khởi tạo lại đối tượng chính hay sửa code nguồn.
+* **Ví dụ:** Một `Player` có thể đổi từ `Kiem` sang `Sung` ngay lập tức nhờ `player.setWeapon(new Sung())`.
+
+
+
+### 🟢 Tránh vấn đề "Class Explosion" & Giới hạn đơn kế thừa
+Java chỉ cho phép `extends` một lớp duy nhất. Nếu dùng Inheritance để kết hợp nhiều tính năng (Bay, Lặn, Chạy), bạn sẽ rơi vào thảm họa bùng nổ lớp con (RobotBayLan, RobotBayChay...).
+* **Giải pháp:** Dùng Composition để "lắp ráp" nhiều Interface/Class khác nhau vào một thực thể duy nhất. Một lớp có thể sở hữu (Has-a) vô số linh kiện.
+
+
+
+### 🟢 Bảo vệ tính Đóng gói (Encapsulation) & Quyền kiểm soát
+* **Inheritance (Tight Coupling):** Cha và Con dùng chung một thực thể trên **vùng nhớ Heap**. Cha thay đổi logic bên trong (dù biến là private), Con có thể bị "hỏng" theo vì dùng chung trạng thái. Lớp con cũng bị "ép" phơi bày mọi hàm Public của lớp cha.
+* **Composition (Loose Coupling):** Lớp chính và Linh kiện là 2 thực thể độc lập trên Heap. Bạn có quyền **giấu** linh kiện đi (`private field`) và chỉ cung cấp những hàm thực sự cần thiết. Nếu linh kiện lỗi, bạn có thể chủ động chặn gọi hàm hoặc tráo linh kiện khác.
+
+
+
+### 🟢 Khi quan hệ thực sự là "Has-a" thay vì "Is-a"
+* **Is-a (Inheritance):** "Lớp con LÀ một phiên bản của lớp cha" (Manager is an Employee).
+* **Has-a (Composition):** "Lớp chính SỞ HỮU một công cụ" (Task has a Database). Đừng dùng Inheritance chỉ để "ké" code của lớp khác.
+
+---
+
+## 3. Điều kiện để Composition linh hoạt tối đa
+
+Để Composition đạt được sức mạnh thực thụ (Loose Coupling), nó **phải** kết hợp với **Abstraction**:
+
+1. **Khai báo kiểu Abstraction:** Thuộc tính trong lớp chính phải là **Interface** hoặc **Abstract Class** (ví dụ: `private NotificationService notice;`). Điều này giúp lớp chính không bị "hàn chết" vào bất kỳ một Implementation cụ thể nào (như MySQL hay Email).
+2. **Cơ chế Dependency Injection (DI):** Không dùng từ khóa `new` bên trong lớp chính. Hãy để đối tượng được "ném" vào qua Constructor hoặc Setter. Điều này tách rời việc "Sử dụng" và "Khởi tạo".
+3. **Đa hình (Polymorphism):** Các linh kiện thực tế (`Email`, `SMS`) thực thi Interface chung để có thể tráo đổi cho nhau.
+
+```java
+// ĐỈNH CAO CỦA SỰ LINH HOẠT: Composition + Abstraction
+class Task {
+    // 1. Chỉ phụ thuộc vào Interface (Loose Coupling)
+    private DatabaseStorage storage; 
+
+    // 2. "Cắm" linh kiện từ bên ngoài (Dependency Injection)
+    public void setStorage(DatabaseStorage storage) {
+        this.storage = storage; 
+    }
+    
+    public void save() {
+        // 3. Không quan tâm bên dưới là MySQL hay MongoDB (Abstraction)
+        // Nếu MySQL lỗi, chỉ cần truyền vào một implementation khác đã sửa lỗi.
+        storage.insert(this.data); 
+    }
+}
