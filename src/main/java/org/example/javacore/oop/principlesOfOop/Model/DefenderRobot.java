@@ -1,4 +1,4 @@
-package org.example.javacore.oop.principlesOfOop.Model;
+package org.example.javacore.oop.principlesOfOop.model;
 
 public class DefenderRobot extends Robot {
 
