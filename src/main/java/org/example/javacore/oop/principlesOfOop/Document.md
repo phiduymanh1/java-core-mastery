@@ -379,3 +379,57 @@ class Task {
         storage.insert(this.data); 
     }
 }
+```
+# Interview Prep: Polymorphism vs. Control Flow (If-Else)
+
+## 1. Vấn đề (The Problem)
+Nhiều người lầm tưởng rằng có **Polymorphism** (Đa hình) là sẽ xóa sổ hoàn toàn `if-else`. Thực tế, `if-else` vẫn tồn tại nhưng được dịch chuyển sang một vị trí hợp lý hơn.
+
+## 2. Phân biệt: Khởi tạo (Creation) vs. Hành vi (Behavior)
+
+| Đặc điểm | Khởi tạo (Creation) | Hành vi (Behavior) |
+|:---|:---|:---|
+| **Cần `if-else`?** | **CÓ**. Cần phân biệt input để tạo đúng Object. | **KHÔNG**. Chỉ cần gọi hàm chung của lớp cha. |
+| **Vị trí** | Tại Factory, Controller, hoặc tầng nhận dữ liệu. | Tại Service, Business Logic tầng sâu. |
+| **Kỹ thuật** | Simple Factory, Factory Method, Dependency Injection. | Method Overriding (Dynamic Dispatch). |
+
+---
+
+## 3. Minh họa bằng Code
+
+### ❌ Cách làm thủ tục (Dễ lỗi khi mở rộng)
+Logic kiểm tra loại bị rải rác trong các hàm xử lý nghiệp vụ.
+
+```java
+public void makeAnimalSound(Animal a) {
+    // Vi phạm tính bao đóng: Service phải đi kiểm tra từng loại cụ thể
+    if (a instanceof Dog) {
+        System.out.println("Gâu gâu");
+    } else if (a instanceof Cat) {
+        System.out.println("Meo meo");
+    }
+}
+```
+Tính đa hình không sinh ra để tiêu diệt hoàn toàn if-else, mà để cô lập chúng. Bằng cách đẩy logic phân biệt loại ra các tầng khởi tạo (như Factory), em giúp các tầng xử lý nghiệp vụ (Service) trở nên linh hoạt, dễ mở rộng và tuân thủ nguyên tắc Open/Closed (SOLID): Thêm loài vật mới mà không cần sửa code cũ.
+
+# Abstraction và Polymorphism khác nhau như thế nào?
+
+**Abstraction** là việc định nghĩa ra một interface hoặc contract, chỉ expose những gì cần thiết và ẩn đi chi tiết implementation.
+
+**Polymorphism** là khả năng một interface có nhiều cách implement khác nhau, và khi gọi method thì sẽ thực thi đúng behavior tương ứng với object thực tế.
+
+Nói đơn giản:
+
+* **Abstraction** → định nghĩa “làm gì”
+* **Polymorphism** → thực hiện “làm như thế nào”
+
+# Nếu đã có abstraction rồi thì có cần polymorphism không? Hay chỉ cần interface là đủ?
+
+* **Abstraction** chỉ định nghĩa ra interface hoặc contract, nhưng nếu không có polymorphism thì hệ thống chỉ có một cách implement cố định.
+
+* **Polymorphism** cho phép nhiều class implement cùng một abstraction và tại runtime sẽ gọi đúng implementation tương ứng.
+
+* Vì vậy **abstraction** và **polymorphism** luôn đi cùng nhau:
+  * **Abstraction** định nghĩa “làm gì”, còn **polymorphism** giúp thực thi “làm như thế nào” một cách linh hoạt.
+
+* Nếu chỉ có **abstraction** mà không tận dụng **polymorphism**, thì thiết kế sẽ kém linh hoạt và khó mở rộng khi có thêm **behavior** mới.
