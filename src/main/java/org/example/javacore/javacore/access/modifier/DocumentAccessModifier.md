@@ -75,29 +75,51 @@ public class MyClass {
 ```
 
 ### Protected
-- Có thể truy cập trong cùng package
-- Có thể truy cập từ class con (subclass) - kể cả khác package
+- Có thể truy cập **tự do** trong cùng package.
+- Có thể truy cập từ **subclass** (kể cả subclass nằm ở package khác).
+- **Khi subclass nằm ở package khác**:
+  - Chỉ được truy cập protected member **qua bản thân subclass** (`this`, `super`, hoặc trực tiếp tên field/method).
+  - **Không được** truy cập qua reference của lớp cha (`ParentClass`).
+
 - Ví dụ:
+**Ví dụ:**
+
 ```java
+// Package 1
 package org.example.package1;
 
 public class ParentClass {
     protected int protectedField = 30;
     
     protected void protectedMethod() {
-        // ...
+        System.out.println("Protected method from Parent");
     }
 }
 
-// Package khác
+// Package 2 (khác package)
 package org.example.package2;
 
+import org.example.package1.ParentClass;
+
 public class ChildClass extends ParentClass {
-    public void demo() {
-        protectedMethod(); // ✅ Có thể truy cập vì là class con
-        System.out.println(protectedField); // ✅ Có thể truy cập
+
+    public void testAccess() {
+        // Các cách truy cập hợp lệ khi khác package
+        this.protectedField = 100;      // OK
+        System.out.println(this.protectedField);
+
+        super.protectedField = 200;     // OK
+        System.out.println(super.protectedField);
+
+        protectedField = 300;           // OK (trực tiếp)
+        protectedMethod();              // OK
+
+        // Cách KHÔNG hợp lệ khi khác package
+        // ParentClass obj = new ChildClass();
+        // obj.protectedField = 500;    // Compile Error!
     }
 }
+
 ```
 
 ### Public
@@ -142,3 +164,7 @@ public class MyClass {
 - Mặc định nên dùng `private` cho fields, chỉ dùng public/private methods qua getter/setter
 - Chỉ dùng `public` khi thực sự cần thiết
 - `protected` thường dùng cho methods cần được override bởi class con
+
+
+# Interview Prep: Access Modifier
+
