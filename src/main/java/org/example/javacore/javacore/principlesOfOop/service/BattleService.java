@@ -1,6 +1,6 @@
-package org.example.javacore.oop.principlesOfOop.service;
+package org.example.javacore.javacore.principlesOfOop.service;
 
-import org.example.javacore.oop.principlesOfOop.model.Robot;
+import org.example.javacore.javacore.principlesOfOop.model.Robot;
 
 public class BattleService {
 

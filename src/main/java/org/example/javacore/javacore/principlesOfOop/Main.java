@@ -1,9 +1,9 @@
-package org.example.javacore.oop.principlesOfOop;
+package org.example.javacore.javacore.principlesOfOop;
 
-import org.example.javacore.oop.principlesOfOop.model.AssaultRobot;
-import org.example.javacore.oop.principlesOfOop.model.DefenderRobot;
-import org.example.javacore.oop.principlesOfOop.model.Robot;
-import org.example.javacore.oop.principlesOfOop.service.BattleService;
+import org.example.javacore.javacore.principlesOfOop.model.AssaultRobot;
+import org.example.javacore.javacore.principlesOfOop.model.DefenderRobot;
+import org.example.javacore.javacore.principlesOfOop.model.Robot;
+import org.example.javacore.javacore.principlesOfOop.service.BattleService;
 
 public class Main {
 
