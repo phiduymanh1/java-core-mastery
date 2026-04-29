@@ -60,13 +60,13 @@ Trong LinkedList mỗi phần tử là một node:
 ### Sự khác nhau giữa HashSet, TreeSet, LinkedHashSet
 
 #### HashSet
-- **Cấu trúc dữ liệu**: Dựa trên bảng băm (hash table)
+- **Cấu trúc dữ liệu**: Dựa trên bảng băm [hash table](#Hash-table)
 - **Thứ tự phần tử**: Không đảm bảo, có thể thay đổi bất kỳ lúc nào
 - **Hiệu suất**: Tìm kiếm, thêm, xóa phần tử nhanh (trung bình là O(1))
 - **Điểm nổi bật**: Nhanh nhất trong 3 loại nếu không quan tâm đến thứ tự
 
 #### TreeSet
-- **Cấu trúc dữ liệu**: Dựa trên cây nhị phân cân bằng (Red-Black tree)
+- **Cấu trúc dữ liệu**: Dựa trên cây nhị phân cân bằng [Red-Black tree](#2.-Red-Black-Tree-(Java-8+))
 - **Thứ tự phần tử**: Tự động sắp xếp tăng dần theo thứ tự tự nhiên (natural ordering) hoặc theo Comparator nếu cung cấp
 - **Hiệu suất**: Thêm, xóa, tìm kiếm mất O(log n)
 - **Điểm nổi bật**: Dùng khi cần sắp xếp tự nhiên hoặc có thứ tự cụ thể
@@ -186,3 +186,124 @@ Best practice:
 List<Integer> list = new ArrayList<>(1000);
 ```
 → Giảm số lần resize → tối ưu performance
+
+## Hash table
+- **Hash table** là cấu trúc dữ liệu lưu trữ key -> value, cho phép truy cập rất nhanh (gần O(1))
+
+---
+
+### Vì sao gọi là "bảng băm"?
+
+- "Bảng" → vì dữ liệu được lưu trong **một mảng (table/array)**
+- "Băm" → vì sử dụng **hash function (hàm băm)** để chuyển key thành một số (index)
+
+👉 Nói đơn giản:
+- Key bất kỳ → qua hàm băm → ra vị trí trong mảng
+
+---
+
+### Cách hoạt động
+
+Giả sử ta có một bảng (array) kích thước 16:
+
+```text
+index:   0   1   2   3   4   ... 15
+value:  [ ] [ ] [ ] [ ] [ ] ... [ ]
+```
+Bước 1: Thêm phần tử
+``` java
+map.put("A", 1);
+```
+* Tính hash:
+```
+hash("A") = hashCode của "A" (ví dụ minh họa: 65)
+```
+* Tính index:
+```
+index = (capacity - 1) & hash
+Ví dụ: 
+capacity = 16 → (16 - 1) = 15
+index = 15 & hash
+```
+* Lưu vào:
+```
+array[1] = ("A", 1)
+```
+
+Bước 2: Lấy phần tử
+``` java
+map.get("A");
+```
+* Tính lại hash:
+```
+hash("A") = 65 → index = 1
+```
+* Lấy ngay:
+```
+array[1] → ("A", 1)
+```
+
+### ⚠️ Collision (đụng độ)
+
+Collision xảy ra khi:
+- 2 key khác nhau
+- nhưng có cùng index trong mảng
+
+Ví dụ:
+``` java
+hash("A") → index 1
+hash("B") → index 1
+```
+Không ghi đè, mà lưu cùng một bucket
+
+---
+
+### Cách xử lý collision
+
+#### 1. Linked List (Java 7)
+array[1] → (A,1) → (B,2)
+---
+#### 2. Red-Black Tree (Java 8+)
+
+Nếu số phần tử trong bucket lớn:
+array[1] → tree structure  
+Giúp giảm từ O(n) → O(log n)
+
+- Red-Black Tree là một cây nhị phân tìm kiếm (BST) tự cân bằng
+
+Nghĩa là:
+- Có dạng cây (tree)
+- Luôn giữ cân bằng tương đối
+- Giúp thao tác nhanh: O(log n)
+
+Mục đích:
+- Tránh trường hợp LinkedList bị dài → tìm kiếm chậm O(n)
+- Đảm bảo hiệu năng ổn định khi có nhiều collision
+
+Cách hoạt động (hiểu đơn giản):
+- Mỗi node có màu: đỏ hoặc đen
+- Khi thêm/xóa phần tử:
+  - Nếu cây bị lệch → sẽ **xoay (rotate) lại**
+  - Nếu vi phạm quy tắc → sẽ **đổi màu**
+    → giúp cây không bị lệch quá
+
+Trong HashMap:
+- Khi số phần tử trong 1 bucket ≥ 8 → chuyển từ LinkedList → Red-Black Tree
+- Khi ít lại (≤ 6) → có thể chuyển lại thành LinkedList
+
+Kết luận:
+- LinkedList → đơn giản nhưng chậm khi nhiều phần tử
+- Red-Black Tree → phức tạp hơn nhưng đảm bảo luôn nhanh O(log n)
+
+### 3. Bucket là gì?
+
+- **Bucket** là một “ô” trong mảng của hash table
+- Mỗi bucket chứa **0 hoặc nhiều phần tử** có cùng index
+- Ô nào bị collision sẽ lưu các phần tử bằng LinkedList (Java 7) hoặc Tree (Java 8+)
+
+## Note
+1. Hash table giúp tối ưu việc tìm kiếm phần tử từ O(n) xuống O(1), trong khi với ArrayList, việc tìm kiếm (contains) vẫn là O(n) dù get theo index là O(1).
+2. HashMap có độ phức tạp trung bình O(1), nhưng trong trường hợp nhiều key bị collision và rơi vào cùng bucket, nếu dùng LinkedList thì có thể lên O(n). Tuy nhiên từ Java 8, khi số phần tử trong bucket vượt ngưỡng, nó sẽ chuyển sang Red-Black Tree nên giảm xuống O(log n).
+3. HashMap sẽ treeify khi bucket có ≥ 8 phần tử và table size ( kich thuoc mang .sỉze()) ≥ 64. Nếu table nhỏ hơn thì sẽ ưu tiên resize thay vì chuyển sang tree.
+4. >= 8 (chuyen qua tree); <= 6 (chuyen ve linked list); >=64 doi qua tree
+5. 
