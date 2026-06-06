@@ -1,4 +1,4 @@
-package org.example.java_core.p04_collection_framework;
+package org.example.java_core.collection_framework;
 
 /**
  * Is collection

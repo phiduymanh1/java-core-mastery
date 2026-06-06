@@ -404,6 +404,7 @@ public class FullStackDeveloper implements Coder, Designer, Tester, Deployer {
 **Nguyên tắc đảo ngược sự phụ thuộc**
 
 > Code nên phụ thuộc vào abstraction (giao diện), không phải phụ thuộc vào cụ thể (implementation).
+> Module cấp cao không nên phụ thuộc vào module cấp thấp. Cả hai nên phụ thuộc vào trừu tượng (abstraction/interface).
 > - Inject phụ thuộc qua constructor hoặc @Autowired
 > - Làm việc qua interface thay vì class cụ thể
 

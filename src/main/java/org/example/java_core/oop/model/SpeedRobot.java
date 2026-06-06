@@ -1,4 +1,4 @@
-package org.example.java_core.p01_principlesO_of_oop.model;
+package org.example.java_core.oop.model;
 
 import java.util.Random;
 

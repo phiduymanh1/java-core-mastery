@@ -177,27 +177,3 @@ graph TD
 
     * Khi nào dùng interface vs abstract class
     * Khi nào cần design pattern (Strategy, Factory)
-
----
-
-## 🧩 TODO IMPLEMENT
-
-* [ ] Tạo abstract class Robot
-* [ ] Tạo 3 loại robot (Assault, Defender, Speed)
-* [ ] Implement attack + skill
-* [ ] Viết BattleService
-* [ ] Tạo main() chạy battle
-* [ ] Refactor theo clean code
-* [ ] Viết unit test cơ bản
-
----
-
-## 🚀 Optional nâng cấp
-
-* [ ] Critical hit
-* [ ] Energy cost system
-* [ ] Cooldown skill
-* [ ] Random damage
-* [ ] Map + position (grid)
-
----

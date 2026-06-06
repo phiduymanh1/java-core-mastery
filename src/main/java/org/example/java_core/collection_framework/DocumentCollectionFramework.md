@@ -306,4 +306,13 @@ Kết luận:
 2. HashMap có độ phức tạp trung bình O(1), nhưng trong trường hợp nhiều key bị collision và rơi vào cùng bucket, nếu dùng LinkedList thì có thể lên O(n). Tuy nhiên từ Java 8, khi số phần tử trong bucket vượt ngưỡng, nó sẽ chuyển sang Red-Black Tree nên giảm xuống O(log n).
 3. HashMap sẽ treeify khi bucket có ≥ 8 phần tử và table size ( kich thuoc mang .sỉze()) ≥ 64. Nếu table nhỏ hơn thì sẽ ưu tiên resize thay vì chuyển sang tree.
 4. >= 8 (chuyen qua tree); <= 6 (chuyen ve linked list); >=64 doi qua tree
-5. 
+5. Decimal	Binary
+   1	0001
+   2	0010
+   3	0011
+   4	0100
+   5	0101
+   6	0110
+   7	0111
+   8	1000
+6. 
