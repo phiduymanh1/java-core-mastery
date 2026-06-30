@@ -130,7 +130,7 @@ Synchronization giúp:
 - Tránh race condition
 - Đảm bảo tính nhất quán dữ liệu
 
-### 3. Data Flow (luồng đi của dữ liệu)
+### 6. Data Flow (luồng đi của dữ liệu)
 
 Ví dụ một request backend:
 
@@ -175,3 +175,11 @@ Response
    ↓
 Thread quay về Pool
 ```
+ 
+### 7. Phá hoại & Trace Bug
+|No|Kịch bản phá hoại|Cách phá hoại|Exception bắn ra|Từ khóa cốt lõi trong Log(Keyword)|Cách xử lý nhanh|
+|:---|:---|:---|:---|:---|:---:|
+|1|Bỏ AtomicInteger|Bỏ AtomicInteger|No|Race Condition|<ul><li>Sử dụng lại các lớp Atomic</li><li>synchronized</li></ul>|
+|2|Chia cho 0 trong lambda|Chia cho 0 trong lambda|java.lang.ArithmeticException|ArithmeticException <br> ExecutionException <br> CompletionException|<ul><li>Exceptionally</li> <li> Handle </li> <li> Try - catch </li></ul>
+|3|Thread Pool bị nghẽn|Thread.sleep(60000)|AsyncRequestTimeoutException|<ul><li>Task rejected</li><li>Thread starvation</li><li>Timeout</li></ul>|Tăng timeout cấu hình trong application.yml|
+|4|Check-Then-Act Race Condition|Gửi 2 thread cùng 1 lúc với value = 100 làm cho 1 thread trừ số dư = 0. Thread còn lại trả về số dư -00|No|<li>Check-Then-Act Race Condition</li><li>CAS loop</li>|CAS loop|
