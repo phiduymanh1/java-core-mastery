@@ -50,7 +50,7 @@ Nhưng dùng chung:
 - Object
 - Biến static
 
-### 2. Runnable / Task
+### 2. Runnable (Task)
 
 Công việc cần thực hiện.
 
@@ -68,7 +68,7 @@ Thread chỉ là "người làm".
 
 Task mới là "việc phải làm".
 
-### 3. Thread Pool
+### 3. Thread Pool ([Document Thread Pool](./thread_pool/DocumentThreadPool.md))
 Nơi quản lý nhiều thread.
 
 Thay vì:
@@ -183,3 +183,7 @@ Thread quay về Pool
 |2|Chia cho 0 trong lambda|Chia cho 0 trong lambda|java.lang.ArithmeticException|ArithmeticException <br> ExecutionException <br> CompletionException|<ul><li>Exceptionally</li> <li> Handle </li> <li> Try - catch </li></ul>
 |3|Thread Pool bị nghẽn|Thread.sleep(60000)|AsyncRequestTimeoutException|<ul><li>Task rejected</li><li>Thread starvation</li><li>Timeout</li></ul>|Tăng timeout cấu hình trong application.yml|
 |4|Check-Then-Act Race Condition|Gửi 2 thread cùng 1 lúc với value = 100 làm cho 1 thread trừ số dư = 0. Thread còn lại trả về số dư -00|No|<li>Check-Then-Act Race Condition</li><li>CAS loop</li>|CAS loop|
+
+
+# To learn later
+- Program Counter (PC)

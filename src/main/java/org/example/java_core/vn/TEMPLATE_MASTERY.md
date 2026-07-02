@@ -52,5 +52,5 @@ graph TD
 
 ## 7. Tổng kết & Action Items
 - **Key Takeaway:** (1 câu tâm đắc nhất sau khi xong module này).
-- **Ứng dụng:** (Tôi sẽ áp dụng kiến thức này vào dự án "Next Step" hoặc công việc tại FSoft như thế nào?)
+- **Ứng dụng:** (Tôi sẽ áp dụng kiến thức này vào dự án hoặc công việc như thế nào?)
 - **Lỗ hổng còn lại:** (Những gì tôi vẫn chưa hiểu rõ và cần tìm hiểu thêm).
