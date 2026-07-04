@@ -91,7 +91,7 @@ Thread 3
 Backend hiện đại gần như đều dùng Thread Pool.
 
 
-### 4. Queue (Hàng đợi)
+### 4. Queue (Hàng đợi) ([Document Queue](../collection_framework/DocumentQueue.md))
 Nơi chứa các Task đang chờ xử lý.
 
 ```text
@@ -184,6 +184,21 @@ Thread quay về Pool
 |3|Thread Pool bị nghẽn|Thread.sleep(60000)|AsyncRequestTimeoutException|<ul><li>Task rejected</li><li>Thread starvation</li><li>Timeout</li></ul>|Tăng timeout cấu hình trong application.yml|
 |4|Check-Then-Act Race Condition|Gửi 2 thread cùng 1 lúc với value = 100 làm cho 1 thread trừ số dư = 0. Thread còn lại trả về số dư -00|No|<li>Check-Then-Act Race Condition</li><li>CAS loop</li>|CAS loop|
 
+### 8.Executor Service
+
+* **Bản chất:** Framework quản lý **Thread Pool** tự động, giúp tái sử dụng Thread, tránh quá tải hệ thống so với việc tạo `new Thread()` thủ công.
+* **Khởi tạo (`Executors`):**
+    * `newFixedThreadPool(n)`: Cố định `n` Thread.
+    * `newCachedThreadPool()`: Tự co giãn số Thread theo lượng việc.
+    * `newSingleThreadExecutor()`: Chỉ có 1 Thread, chạy tuần tự.
+* **Gửi task:** * `execute()`: Chạy không cần kết quả.
+    * `submit()`: Trả về `Future<T>` để lấy kết quả sau đó.
+* **Lưu ý:** Bắt buộc gọi `executor.shutdown()` khi dùng xong để tránh rò rỉ bộ nhớ (**Memory Leak**).
+
+### 9.ThreadPoolTaskExecutor 
+* **Bản chất:** Là lớp bọc (wrapper) của Spring dựa trên `ThreadPoolExecutor` của Java thuần, giúp tích hợp mượt mà với Spring IoC Container và tự động đóng pool khi ứng dụng tắt.
+* **Cách dùng chính:** Thường được cấu hình làm Spring Bean để làm bệ đỡ cho annotation `@Async`, giúp xử lý các tác vụ bất đồng bộ (chạy ngầm) như gửi email, export file.
+* **Luồng xử lý:** Ưu tiên dùng hết `CorePoolSize` -> Đẩy vào `QueueCapacity` chờ -> Nếu queue đầy mới tạo thêm thread đến mức `MaxPoolSize` -> Quá tải sẽ kích hoạt chính sách từ chối.
 
 # To learn later
 - Program Counter (PC)
