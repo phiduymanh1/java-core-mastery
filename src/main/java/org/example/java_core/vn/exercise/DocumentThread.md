@@ -200,6 +200,25 @@ Thread quay về Pool
 * **Cách dùng chính:** Thường được cấu hình làm Spring Bean để làm bệ đỡ cho annotation `@Async`, giúp xử lý các tác vụ bất đồng bộ (chạy ngầm) như gửi email, export file.
 * **Luồng xử lý:** Ưu tiên dùng hết `CorePoolSize` -> Đẩy vào `QueueCapacity` chờ -> Nếu queue đầy mới tạo thêm thread đến mức `MaxPoolSize` -> Quá tải sẽ kích hoạt chính sách từ chối.
 
+### 10. Blocking I/O
+Thread đang chờ
+
+- Database
+- REST API
+- File
+- Redis
+- Kafka
+
+=> Thread vẫn chiếm tài nguyên dù không làm gì. 
+
+Nếu có 1000 request
+
+và mỗi request chờ DB 500ms
+
+thì rất nhanh Thread Pool sẽ đầy.
+
+#### 10.1. Non-blocking I/O
+
 # To learn later
 - Program Counter (PC)
 - Saturation
