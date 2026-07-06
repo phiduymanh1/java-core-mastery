@@ -202,3 +202,5 @@ Thread quay về Pool
 
 # To learn later
 - Program Counter (PC)
+- Saturation
+- 
