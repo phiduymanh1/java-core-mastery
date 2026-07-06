@@ -188,6 +188,15 @@ Response
 Thread quay về Pool
 ```
 
+### 6.1. Thread-per-request Model (Mô hình cốt lõi của Servlet/Spring MVC)
+
+- **Bản chất:** 1 Request = 1 Thread độc lập xử lý trọn gói từ A -> Z.
+- **Mối quan hệ với Thread Pool:** Server (như Tomcat) duy trì một Thread Pool cố định. Khi Request đến, nó lấy 1 Thread ra chạy, chạy xong trả Thread về Pool.
+
+Ưu và nhược điểm trực diện:
+- **Ưu điểm:** Dễ code, dễ debug, các biến local cô lập hoàn toàn giữa các Request (Thread-safe tự nhiên).
+- **Nhược điểm (Nỗi đau):** Liên kết chặt chẽ với **Mục 10 (Blocking I/O)**. Khi Thread phải đợi DB/API, nó "ngủ đông" nhưng vẫn chiếm tài nguyên (khoảng 1MB/Thread). Hệ thống rất dễ rơi vào kịch bản **Mục 7 - Số 3 (Thread Pool bị nghẽn / Thread Starvation)** khi lượng request đồng thời vượt quá cấu hình của Pool
+
 ### 7. Phá hoại & Trace Bug
 
 | No  | Kịch bản phá hoại             | Cách phá hoại                                                                                           | Exception bắn ra              | Từ khóa cốt lõi trong Log(Keyword)                                        |                             Cách xử lý nhanh                             |
