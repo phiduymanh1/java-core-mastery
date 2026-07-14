@@ -194,6 +194,7 @@ Thread quay về Pool
 - **Mối quan hệ với Thread Pool:** Server (như Tomcat) duy trì một Thread Pool cố định. Khi Request đến, nó lấy 1 Thread ra chạy, chạy xong trả Thread về Pool.
 
 Ưu và nhược điểm trực diện:
+
 - **Ưu điểm:** Dễ code, dễ debug, các biến local cô lập hoàn toàn giữa các Request (Thread-safe tự nhiên).
 - **Nhược điểm (Nỗi đau):** Liên kết chặt chẽ với **Mục 10 (Blocking I/O)**. Khi Thread phải đợi DB/API, nó "ngủ đông" nhưng vẫn chiếm tài nguyên (khoảng 1MB/Thread). Hệ thống rất dễ rơi vào kịch bản **Mục 7 - Số 3 (Thread Pool bị nghẽn / Thread Starvation)** khi lượng request đồng thời vượt quá cấu hình của Pool
 
@@ -241,9 +242,10 @@ và mỗi request chờ DB 500ms
 
 thì rất nhanh Thread Pool sẽ đầy.
 
-#### 10.1. Non-blocking I/O ([Non blocking I/O](./blocking_io/DocumentNonBlockingIO.md))
+> 💡 **Giải pháp:** Chuyển sang mô hình **[Non-blocking I/O](./blocking_io/DocumentNonBlockingIO.md)** để giải phóng Thread trong thời gian chờ đợi.
 
 ### 11. Lock Contention
+
 Nhiều Thread cùng muốn truy cập
 
 - synchronized
@@ -257,11 +259,13 @@ CPU không bận làm việc.
 CPU bận... chờ.
 
 #### 11.1. Lock-free Programming
-#### 11.2. CAS (Compare-And-Swap) 
+
+#### 11.2. CAS (Compare-And-Swap)
+
 - Tham khảo `repo letcode`
 
-
 ### 12. Context Switching
+
 1000 Thread
 
 chỉ có
@@ -276,22 +280,29 @@ CPU phải đổi qua đổi lại giữa các Thread.
 
 Có lúc CPU dành nhiều thời gian chuyển Thread hơn là chạy business.
 
+> 💡 **Giải pháp tối ưu:** Tìm hiểu cơ chế chia nhỏ và phân phối tác vụ thông minh thông qua **[ForkJoinPool](./context-switching/DocumentForkJoinPool.md)**.
+
 ### 13. Best practive thread ([Best Practive doc](./BestPractiveThread.md))
+
+### 14. Top 2 Anti-patterns phổ biến
+
+- Thread per Request
+- Shared Mutable State
 
 # To learn later
 
-* Program Counter (PC)
-* Saturation
-* Blocking I/O
-    * Reactive Programming
-    * Async I/O
-    * Event Loop
-* Lock Contention
-    * Lock-free Programming
-    * Atomic Variables
-    * Concurrent Collections
-* Context Switching
-    * Context Switching
-    * CPU Scheduling
-    * Work Stealing
-    * ForkJoinPool
+- Program Counter (PC)
+- Saturation
+- Blocking I/O
+  - Reactive Programming
+  - Async I/O
+  - Event Loop
+- Lock Contention
+  - Lock-free Programming
+  - Atomic Variables
+  - Concurrent Collections
+- Context Switching
+  - Context Switching
+  - CPU Scheduling
+  - Work Stealing
+  - ForkJoinPool
