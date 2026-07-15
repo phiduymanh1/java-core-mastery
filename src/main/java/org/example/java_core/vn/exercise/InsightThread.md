@@ -1,0 +1,2 @@
+# Insight
+- Khi dùng while lặp khởi tạo vô số thread với mỗi thread sẽ sleep 10p. Mục tiêu muốn xảy ra lỗi `OutOfMemoryError`. Tuy nhiên theo quan sát memory thì khi đến > 95% ram được sử dụng java sẽ có cơ chế theo tìm hiểu là `Memory Paging (Page Out)` để tối ưu ram sau đó ram từ từ giảm mức sử dụng xuống 90%-92%

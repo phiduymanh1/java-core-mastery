@@ -289,6 +289,8 @@ Có lúc CPU dành nhiều thời gian chuyển Thread hơn là chạy business.
 - Thread per Request
 - Shared Mutable State
 
+# Insight ([Insight Detail](./InsightThread.md))
+
 # To learn later
 
 - Program Counter (PC)
